@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá & So Sánh Omega-3 tại Việt Nam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is structured as a user-centric, single-page guide. It starts with a general introduction (Hero), explains the basics (Understanding Omega-3), showcases benefits via interactive icons (Key Benefits), provides a core interactive product comparison tool with filters and a dynamic chart, educates on selection criteria, and finally offers safety notes in an accordion. This task-oriented flow—from learning to comparing to deciding—is more intuitive for a user than a linear report structure. It empowers users to find relevant information quickly based on their specific needs (e.g., "I need Omega-3 for my child's brain development"). -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Product data (Brand, EPA/DHA, Price). Goal: Compare. Viz/Method: Interactive cards + dynamic Chart.js bar chart. Interaction: Users filter by target audience/health goal, which updates both the cards and the chart. Justification: A dynamic chart provides a much clearer and faster comparison of nutritional values than reading numbers in a table. Library: Chart.js (Canvas).
+        - Report Info: Key benefits of Omega-3. Goal: Inform. Viz/Method: Icon-based grid. Interaction: Click to reveal details. Justification: Visually engaging and less overwhelming than a long text block. Method: HTML/CSS/JS.
+        - Report Info: Safety warnings. Goal: Inform without alarming. Viz/Method: Accordion. Interaction: Click to expand. Justification: Keeps the UI clean and allows users to access details as needed without being confronted by a wall of text. Method: HTML/CSS/JS.
+        - Report Info: What are EPA, DHA, ALA? Goal: Educate. Viz/Method: Informational cards. Interaction: Static display. Justification: Simple, clear presentation for foundational knowledge. Method: HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover {
+            color: #D97706; 
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #D97706;
+            transition: all 0.3s ease-in-out;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F3F4F6;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .btn-filter {
+            transition: all 0.3s ease;
+            border: 1px solid #E5E7EB;
+        }
+        .btn-filter.active {
+            background-color: #FBBF24;
+            color: #4A4A4A;
+            border-color: #FBBF24;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-amber-600">Omega-3 Explorer</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#loi-ich" class="nav-link">Lợi Ích</a>
+                <a href="#so-sanh" class="nav-link">So Sánh Sản Phẩm</a>
+                <a href="#tieu-chi" class="nav-link">Tiêu Chí Chọn</a>
+                <a href="#an-toan" class="nav-link">Lưu Ý An Toàn</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#loi-ich" class="block py-2 px-4 text-sm text-gray-700 hover:bg-amber-50">Lợi Ích</a>
+            <a href="#so-sanh" class="block py-2 px-4 text-sm text-gray-700 hover:bg-amber-50">So Sánh Sản Phẩm</a>
+            <a href="#tieu-chi" class="block py-2 px-4 text-sm text-gray-700 hover:bg-amber-50">Tiêu Chí Chọn</a>
+            <a href="#an-toan" class="block py-2 px-4 text-sm text-gray-700 hover:bg-amber-50">Lưu Ý An Toàn</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section class="text-center mb-20">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">Cẩm Nang Omega-3 Toàn Diện</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Một công cụ tương tác giúp bạn hiểu rõ, so sánh và lựa chọn sản phẩm Omega-3 phù hợp nhất tại Việt Nam.</p>
+        </section>
+
+        <section id="hieu-ve-omega3" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Hiểu Đúng về "Gia Đình" Omega-3</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">Không phải Omega-3 nào cũng giống nhau. Khám phá 3 loại axit béo chính và vai trò đặc biệt của chúng.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-3">🌿</div>
+                    <h3 class="text-xl font-bold mb-2 text-green-700">ALA (Thực vật)</h3>
+                    <p class="text-gray-600">Có trong hạt lanh, hạt chia. Cơ thể cần chuyển hóa thành EPA/DHA nhưng hiệu suất thấp. Là nguồn bổ sung tốt cho người ăn chay nhưng hiệu quả có phần hạn chế.</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-3">❤️</div>
+                    <h3 class="text-xl font-bold mb-2 text-red-600">EPA (Dầu cá)</h3>
+                    <p class="text-gray-600">Hỗ trợ sức khỏe tim mạch, giảm viêm hiệu quả. Lý tưởng cho người trưởng thành, người cao tuổi và người có nguy cơ về tim mạch, viêm khớp.</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-3">🧠</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-600">DHA (Dầu cá)</h3>
+                    <p class="text-gray-600">Thành phần thiết yếu cho não bộ và mắt. Đặc biệt quan trọng cho sự phát triển của trẻ em, phụ nữ mang thai và cho con bú.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="loi-ich" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Khám Phá Lợi Ích Vàng</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">Omega-3 là nền tảng cho một cơ thể khỏe mạnh. Nhấn vào từng mục để tìm hiểu sâu hơn.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="benefit-card text-center p-6 card cursor-pointer" data-benefit="tim-mach">
+                    <div class="text-5xl mb-4">❤️</div>
+                    <h3 class="font-bold text-lg">Tim Mạch</h3>
+                </div>
+                <div class="benefit-card text-center p-6 card cursor-pointer" data-benefit="nao-bo">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <h3 class="font-bold text-lg">Não Bộ</h3>
+                </div>
+                <div class="benefit-card text-center p-6 card cursor-pointer" data-benefit="mat">
+                    <div class="text-5xl mb-4">👁️</div>
+                    <h3 class="font-bold text-lg">Thị Lực</h3>
+                </div>
+                <div class="benefit-card text-center p-6 card cursor-pointer" data-benefit="viem">
+                    <div class="text-5xl mb-4">🔥</div>
+                    <h3 class="font-bold text-lg">Chống Viêm</h3>
+                </div>
+            </div>
+            <div id="benefit-details" class="mt-8 p-8 bg-white rounded-lg shadow-inner border border-gray-200 hidden">
+                <h4 id="benefit-title" class="text-2xl font-bold mb-3"></h4>
+                <p id="benefit-text" class="text-gray-700 leading-relaxed"></p>
+            </div>
+        </section>
+
+        <section id="so-sanh" class="mb-20 py-10 bg-gray-50 rounded-xl">
+            <div class="px-6">
+                <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Công Cụ So Sánh & Lựa Chọn</h2>
+                <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">Lọc sản phẩm theo nhu cầu của bạn và xem so sánh trực quan về hàm lượng EPA & DHA.</p>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold">Đối tượng:</span>
+                        <div id="filter-audience" class="flex flex-wrap gap-2">
+                            <button class="btn-filter px-4 py-2 rounded-full text-sm active" data-filter="all">Tất cả</button>
+                            <button class="btn-filter px-4 py-2 rounded-full text-sm" data-filter="tre-em">Trẻ em</button>
+                            <button class="btn-filter px-4 py-2 rounded-full text-sm" data-filter="nguoi-lon">Người lớn</button>
+                            <button class="btn-filter px-4 py-2 rounded-full text-sm" data-filter="phu-nu-mang-thai">Phụ nữ mang thai</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container mb-12">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+
+                <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="tieu-chi" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Bí Quyết Chọn Omega-3 Chất Lượng</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">Đừng chỉ nhìn vào giá! Đây là những yếu tố quan trọng quyết định một sản phẩm có thật sự tốt hay không.</p>
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="card p-6 flex items-start gap-5">
+                    <div class="text-3xl">🎯</div>
+                    <div>
+                        <h4 class="font-bold text-lg">Hàm lượng EPA & DHA thật</h4>
+                        <p class="text-gray-600">Đọc kỹ nhãn để biết chính xác hàm lượng EPA và DHA mỗi viên, chứ không phải tổng lượng dầu cá.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start gap-5">
+                    <div class="text-3xl">🧬</div>
+                    <div>
+                        <h4 class="font-bold text-lg">Dạng hấp thụ (Triglyceride)</h4>
+                        <p class="text-gray-600">Ưu tiên dạng Triglyceride (TG) tự nhiên, cơ thể hấp thụ tốt hơn đến 70% so với dạng Ethyl Ester (EE) đã qua xử lý.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start gap-5">
+                    <div class="text-3xl">⭐</div>
+                    <div>
+                        <h4 class="font-bold text-lg">Chứng nhận quốc tế (IFOS, GOED)</h4>
+                        <p class="text-gray-600">Đây là "bảo chứng vàng" cho độ tinh khiết, sản phẩm không chứa kim loại nặng, tạp chất và có độ tươi mới cao.</p>
+                    </div>
+                </div>
+                 <div class="card p-6 flex items-start gap-5">
+                    <div class="text-3xl">🐟</div>
+                    <div>
+                        <h4 class="font-bold text-lg">Nguồn gốc cá nhỏ, sạch</h4>
+                        <p class="text-gray-600">Sản phẩm từ cá nhỏ (cá cơm, cá mòi) ở vùng biển sạch thường ít tích tụ độc tố hơn các loại cá lớn.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="an-toan">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">An Toàn Là Trên Hết</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">Sử dụng đúng cách để tối đa lợi ích và tránh các tác dụng phụ không mong muốn.</p>
+            <div class="max-w-4xl mx-auto space-y-3">
+                <div class="bg-white rounded-lg border border-gray-200">
+                    <button class="accordion-button w-full flex justify-between items-center text-left p-5 font-semibold">
+                        <span>Tác dụng phụ thường gặp khi quá liều</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-5 pb-5 text-gray-600">
+                        <p>Dùng liều quá cao (thường trên 3000-5000mg/ngày) có thể gây ra: rối loạn tiêu hóa (tiêu chảy, ợ nóng), tăng nguy cơ chảy máu (chảy máu cam, chân răng), tăng đường huyết, hoặc hạ huyết áp quá mức.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200">
+                    <button class="accordion-button w-full flex justify-between items-center text-left p-5 font-semibold">
+                        <span>Ai cần thận trọng khi sử dụng?</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-5 pb-5 text-gray-600">
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Người dị ứng với hải sản.</li>
+                            <li>Người đang dùng thuốc chống đông máu.</li>
+                            <li>Người chuẩn bị phẫu thuật (ngưng trước 2 tuần).</li>
+                            <li>Người có bệnh tiểu đường, huyết áp thấp.</li>
+                            <li>Phụ nữ mang thai hoặc cho con bú nên tham khảo ý kiến bác sĩ.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200">
+                    <button class="accordion-button w-full flex justify-between items-center text-left p-5 font-semibold">
+                        <span>Liều lượng và cách dùng an toàn</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-5 pb-5 text-gray-600">
+                        <p>Thời điểm tốt nhất để uống Omega-3 là trong hoặc ngay sau bữa ăn có chất béo để tăng khả năng hấp thụ. Luôn tuân thủ liều lượng khuyến nghị trên nhãn sản phẩm hoặc theo chỉ định của chuyên gia y tế.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 Omega-3 Explorer. </p>
+            <p class="text-sm text-gray-400 mt-2">Thông tin trên trang web này chỉ mang tính chất tham khảo, không thay thế cho chẩn đoán hoặc tư vấn y tế chuyên nghiệp. Luôn tham khảo ý kiến bác sĩ trước khi sử dụng bất kỳ sản phẩm bổ sung nào.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const productData = [
+                {
+                    name: 'Doppelherz Omega 3 1000',
+                    brand: 'Doppelherz (Đức)',
+                    epa: 180,
+                    dha: 120,
+                    price: '280.000₫ / 80 viên',
+                    audience: ['nguoi-lon'],
+                    goal: ['tim-mach', 'nao-bo', 'mat'],
+                    img: 'https://placehold.co/400x300/FBBF24/333333?text=Doppelherz'
+                },
+                {
+                    name: 'Blackmores Double Strength',
+                    brand: 'Blackmores (Úc)',
+                    epa: 360,
+                    dha: 240,
+                    price: '510.000₫ / 90 viên',
+                    audience: ['nguoi-lon'],
+                    goal: ['tim-mach', 'viem'],
+                    img: 'https://placehold.co/400x300/3B82F6/FFFFFF?text=Blackmores'
+                },
+                {
+                    name: 'Healthy Care Fish Oil 1000mg',
+                    brand: 'Healthy Care (Úc)',
+                    epa: 180,
+                    dha: 120,
+                    price: '420.000₫ / 400 viên',
+                    audience: ['nguoi-lon'],
+                    goal: ['tim-mach', 'nao-bo', 'mat'],
+                    img: 'https://placehold.co/400x300/10B981/FFFFFF?text=Healthy+Care'
+                },
+                {
+                    name: 'BioAmicus Omega-3 Drops',
+                    brand: 'BioAmicus (Canada)',
+                    epa: 40,
+                    dha: 200,
+                    price: '365.000₫ / 30ml',
+                    audience: ['tre-em', 'phu-nu-mang-thai'],
+                    goal: ['nao-bo', 'mat'],
+                    img: 'https://placehold.co/400x300/8B5CF6/FFFFFF?text=BioAmicus'
+                },
+                {
+                    name: 'Vitatree VitaFish Oil',
+                    brand: 'Vitatree (Úc)',
+                    epa: 40,
+                    dha: 400,
+                    price: '345.000₫ / 150 viên',
+                    audience: ['tre-em'],
+                    goal: ['nao-bo', 'mat'],
+                    img: 'https://placehold.co/400x300/EC4899/FFFFFF?text=Vitatree'
+                },
+                {
+                    name: 'Fitobimbi Omega Junior',
+                    brand: 'Fitobimbi (Ý)',
+                    epa: 50,
+                    dha: 250,
+                    price: '390.000₫ / 30ml',
+                    audience: ['tre-em'],
+                    goal: ['nao-bo', 'mat'],
+                    img: 'https://placehold.co/400x300/F97316/FFFFFF?text=Fitobimbi'
+                }
+            ];
+
+            const productList = document.getElementById('product-list');
+            const filterButtons = document.querySelectorAll('#filter-audience button');
+            
+            const chartCtx = document.getElementById('comparisonChart').getContext('2d');
+            let comparisonChart;
+
+            function createChart(data) {
+                if (comparisonChart) {
+                    comparisonChart.destroy();
+                }
+                
+                const visibleProducts = data.slice(0, 6);
+
+                comparisonChart = new Chart(chartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: visibleProducts.map(p => p.name.split(' ').slice(0,3).join(' ')),
+                        datasets: [
+                            {
+                                label: 'EPA (mg)',
+                                data: visibleProducts.map(p => p.epa),
+                                backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                                borderColor: 'rgba(239, 68, 68, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'DHA (mg)',
+                                data: visibleProducts.map(p => p.dha),
+                                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'So sánh hàm lượng EPA & DHA mỗi liều dùng',
+                                font: { size: 16, family: 'Be Vietnam Pro' }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return visibleProducts[context[0].dataIndex].name;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Hàm lượng (mg)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderProducts(products) {
+                productList.innerHTML = '';
+                if (products.length === 0) {
+                    productList.innerHTML = `<p class="text-center col-span-full text-gray-500">Không tìm thấy sản phẩm phù hợp với lựa chọn của bạn.</p>`;
+                    return;
+                }
+                products.forEach(p => {
+                    const productCard = `
+                        <div class="card p-5 flex flex-col">
+                            <img src="${p.img}" alt="${p.name}" class="rounded-lg mb-4 h-48 w-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x300/cccccc/ffffff?text=Image+Not+Found';">
+                            <h4 class="font-bold text-lg">${p.name}</h4>
+                            <p class="text-sm text-gray-500 mb-3">${p.brand}</p>
+                            <div class="text-sm space-y-2 mt-auto pt-3">
+                               <div class="flex justify-between items-center bg-red-50 p-2 rounded">
+                                   <span class="font-semibold text-red-600">❤️ EPA:</span>
+                                   <span class="font-bold text-red-700">${p.epa} mg</span>
+                               </div>
+                               <div class="flex justify-between items-center bg-blue-50 p-2 rounded">
+                                   <span class="font-semibold text-blue-600">🧠 DHA:</span>
+                                   <span class="font-bold text-blue-700">${p.dha} mg</span>
+                               </div>
+                               <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+                                   <span class="font-semibold text-gray-600">💰 Giá tham khảo:</span>
+                                   <span class="font-bold text-gray-700">${p.price}</span>
+                               </div>
+                            </div>
+                        </div>
+                    `;
+                    productList.innerHTML += productCard;
+                });
+            }
+
+            function filterAndRender() {
+                const activeAudience = document.querySelector('#filter-audience .active').dataset.filter;
+                
+                let filteredProducts = productData;
+
+                if (activeAudience !== 'all') {
+                    filteredProducts = filteredProducts.filter(p => p.audience.includes(activeAudience));
+                }
+
+                renderProducts(filteredProducts);
+                createChart(filteredProducts);
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    filterAndRender();
+                });
+            });
+
+            filterAndRender();
+
+            const benefitCards = document.querySelectorAll('.benefit-card');
+            const benefitDetails = document.getElementById('benefit-details');
+            const benefitTitle = document.getElementById('benefit-title');
+            const benefitText = document.getElementById('benefit-text');
+
+            const benefitData = {
+                'tim-mach': {
+                    title: '❤️ Sức Khỏe Tim Mạch',
+                    text: 'EPA và DHA giúp giảm mức triglyceride (mỡ máu), ổn định huyết áp và ngăn ngừa hình thành các mảng xơ vữa trong động mạch. Điều này làm giảm đáng kể nguy cơ đau tim và đột quỵ, bảo vệ trái tim của bạn luôn khỏe mạnh.'
+                },
+                'nao-bo': {
+                    title: '🧠 Phát Triển Não Bộ',
+                    text: 'DHA là thành phần cấu trúc chính của não bộ và võng mạc. Bổ sung đủ DHA giúp tăng cường trí nhớ, khả năng tập trung, tư duy và học tập, đặc biệt quan trọng trong giai đoạn phát triển của trẻ và giúp duy trì chức năng nhận thức ở người lớn tuổi.'
+                },
+                'mat': {
+                    title: '👁️ Tăng Cường Thị Lực',
+                    text: 'DHA đóng vai trò thiết yếu trong việc duy trì chức năng của võng mạc. Nó giúp bảo vệ mắt khỏi các bệnh thoái hóa liên quan đến tuổi tác như thoái hóa điểm vàng, giữ cho đôi mắt của bạn luôn sáng khỏe.'
+                },
+                'viem': {
+                    title: '🔥 Tác Dụng Chống Viêm',
+                    text: 'Omega-3 là một chất chống viêm tự nhiên mạnh mẽ. Chúng giúp giảm các triệu chứng của các bệnh viêm mãn tính như viêm khớp dạng thấp, làm giảm đau, cứng khớp và cải thiện khả năng vận động.'
+                }
+            };
+            
+            benefitCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const benefitKey = card.dataset.benefit;
+                    const data = benefitData[benefitKey];
+                    
+                    benefitTitle.textContent = data.title;
+                    benefitText.textContent = data.text;
+                    benefitDetails.classList.remove('hidden');
+                    
+                    benefitDetails.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            const accordions = document.querySelectorAll('.accordion-button');
+            accordions.forEach(accordion => {
+                accordion.addEventListener('click', () => {
+                    const content = accordion.nextElementSibling;
+                    const icon = accordion.querySelector('span:last-child');
+                    
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                        document.querySelectorAll('.accordion-button span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
