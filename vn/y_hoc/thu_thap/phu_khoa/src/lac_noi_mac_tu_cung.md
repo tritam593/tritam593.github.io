@@ -1,4 +1,14 @@
+<!-- omit in toc -->
 # Nội dung được lấy từ [Box Y Khoa](https://www.facebook.com/BOXYkhoa)
+- [LẠC NỘI MẠC TỬ CUNG LÀ GÌ⁉️](#lạc-nội-mạc-tử-cung-là-gì️)
+- [📕Ca bệnh: 1 Khối đau dai dẳng ở sẹo mổ đẻ - 7 năm tìm kiếm lời giải](#ca-bệnh-1-khối-đau-dai-dẳng-ở-sẹo-mổ-đẻ---7-năm-tìm-kiếm-lời-giải)
+  - [📝Giải thích cơ chế:](#giải-thích-cơ-chế)
+    - [⁉️Tại sao xuất hiện muộn?](#️tại-sao-xuất-hiện-muộn)
+- [📕 Ca số 2: Lạc nội mạc màng phổi gây tràn khí tái phát theo chu kỳ kinh.](#-ca-số-2-lạc-nội-mạc-màng-phổi-gây-tràn-khí-tái-phát-theo-chu-kỳ-kinh)
+- [📕 Ca số 3: Suýt tưởng là ung thư ruột‼️](#-ca-số-3-suýt-tưởng-là-ung-thư-ruột️)
+- [📕 Ca số 4: Lạc nội mạc quanh hậu môn](#-ca-số-4-lạc-nội-mạc-quanh-hậu-môn)
+- [📕 Ca số 5: Bị thần kinh tọa chữa mãi không khỏi.](#-ca-số-5-bị-thần-kinh-tọa-chữa-mãi-không-khỏi)
+- [NHỊN TIỂU Ở NỮ GIỚI (Thêm)](#nhịn-tiểu-ở-nữ-giới-thêm)
 
 # LẠC NỘI MẠC TỬ CUNG LÀ GÌ⁉️
 Lạc nội mạc tử cung (Endometriosis) là một bệnh lý phụ khoa mạn tính xảy ra khi mô nội mạc tử cung (lớp niêm mạc lót bên trong buồng tử cung) phát triển ở ngoài tử cung, chẳng hạn như:

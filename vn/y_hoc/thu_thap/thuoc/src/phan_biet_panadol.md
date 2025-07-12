@@ -1,4 +1,12 @@
+<!-- omit in toc -->
 # Nội dung được lấy từ [Box Y Khoa](https://www.facebook.com/BOXYkhoa)
+
+- [📝 PHÂN BIỆT CÁC LOẠI PANADOL GIẢM ĐAU - HẠ SỐT](#-phân-biệt-các-loại-panadol-giảm-đau---hạ-sốt)
+  - [🔵 PANADOL XANH (Regular)](#-panadol-xanh-regular)
+  - [🔴 PANADOL ĐỎ (Extra)](#-panadol-đỏ-extra)
+  - [🟢 PANADOL CẢM CÚM](#-panadol-cảm-cúm)
+  - [🟣 PANADOL CẢM CÚM BAN ĐÊM (Night)](#-panadol-cảm-cúm-ban-đêm-night)
+- [📕KẾT LUẬN:](#kết-luận)
 
 # 📝 PHÂN BIỆT CÁC LOẠI PANADOL GIẢM ĐAU - HẠ SỐT
 ![Panadol Image](./assert/images/panadol_image.png)

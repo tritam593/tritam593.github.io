@@ -1,4 +1,10 @@
+<!-- omit in toc -->
 # Nội dung được lấy từ [Box Y Khoa](https://www.facebook.com/BOXYkhoa)
+- [82% trẻ bị trên 1 tuổi thiếu máu thiếu sắt là vì uống quá nhiều sữa (\>600ml/ngày)](#82-trẻ-bị-trên-1-tuổi-thiếu-máu-thiếu-sắt-là-vì-uống-quá-nhiều-sữa-600mlngày)
+  - [📝Một nghiên cứu tại Bệnh viện Nhi Đồng 1 năm 2018](#một-nghiên-cứu-tại-bệnh-viện-nhi-đồng-1-năm-2018)
+  - [⁉️Tại sao uống nhiều sữa tươi lại gây thiếu máu thiếu sắt?](#️tại-sao-uống-nhiều-sữa-tươi-lại-gây-thiếu-máu-thiếu-sắt)
+  - [📌 Kết luận \& khuyến nghị cho cha mẹ:](#-kết-luận--khuyến-nghị-cho-cha-mẹ)
+
 # 82% trẻ bị trên 1 tuổi thiếu máu thiếu sắt là vì uống quá nhiều sữa (>600ml/ngày)
 
 ## 📝Một nghiên cứu tại Bệnh viện Nhi Đồng 1 năm 2018
